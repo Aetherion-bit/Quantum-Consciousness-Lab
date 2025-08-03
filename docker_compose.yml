@@ -1,0 +1,30 @@
+version: '3'
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+      - "8050:8050"
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/
+      - INFLUX_URL=http://influxdb:8086
+      - INFLUX_TOKEN=my-token
+      - INFLUX_ORG=my-org
+      - INFLUX_BUCKET=consciousness
+    depends_on:
+      - mongodb
+      - influxdb
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+  influxdb:
+    image: influxdb:latest
+    ports:
+      - "8086:8086"
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=admin
+      - DOCKER_INFLUXDB_INIT_PASSWORD=admin123
+      - DOCKER_INFLUXDB_INIT_ORG=my-org
+      - DOCKER_INFLUXDB_INIT_BUCKET=consciousness
